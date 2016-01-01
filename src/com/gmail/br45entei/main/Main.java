@@ -129,9 +129,17 @@ public final class Main {
 		lblProtocol.setText("Method:");
 		
 		this.httpMethod = new CCombo(this.shell, SWT.BORDER);
+		this.httpMethod.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if(Main.this.httpMethod.getText().equals("BREW")) {
+					Main.this.protocolVersion.setText("HTCPCP/1.1");
+				}
+			}
+		});
 		this.httpMethod.setEditable(false);
 		this.httpMethod.setBackground(SWTResourceManager.getColor(SWT.COLOR_LIST_BACKGROUND));
-		this.httpMethod.setItems(new String[] {"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS", "TRACE", "CONNECT"});
+		this.httpMethod.setItems(new String[] {"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS", "TRACE", "CONNECT", "BREW"});
 		this.httpMethod.setText("GET");
 		this.httpMethod.setBounds(71, 92, 94, 21);
 		
@@ -256,7 +264,7 @@ public final class Main {
 			PrintWriter out = new PrintWriter(new OutputStreamWriter(outStream, StandardCharsets.UTF_8), true);
 			out.println(method + " " + requestURI.replace(" ", "%20").replace("#", "%23") + " " + protocol);
 			out.println("host: " + ip);
-			out.println("User-Agent: HTTPServerTester/1.0 (Windows NT 6.1");
+			out.println("User-Agent: HTTPServerTester/1.0 (Windows NT 6.1)");
 			out.println("Connection: close");
 			out.println(headers);
 			if(!headers.isEmpty()) {
