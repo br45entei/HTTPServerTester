@@ -144,7 +144,7 @@ public final class Main {
 		this.httpMethod.setBounds(71, 92, 94, 21);
 		
 		this.requestURI = new Text(this.shell, SWT.BORDER);
-		this.requestURI.setText("index.html");
+		this.requestURI.setText("/index.html");
 		this.requestURI.setBounds(91, 119, 343, 21);
 		
 		this.protocolVersion = new CCombo(this.shell, SWT.BORDER);
@@ -247,7 +247,7 @@ public final class Main {
 	
 	@SuppressWarnings("resource")
 	public static final String sendRequest(String ip, int port, boolean https, String method, String protocol, String requestURI, String headers, boolean saveDownloadedFile) {
-		requestURI = requestURI.startsWith("/") ? requestURI : "/" + requestURI;
+		requestURI = requestURI.trim().isEmpty() ? "/" : requestURI;//requestURI.startsWith("/") ? requestURI : "/" + requestURI;
 		InetSocketAddress addr = new InetSocketAddress(ip, port);
 		boolean failedToConnect = addr.isUnresolved();
 		if(failedToConnect) {
