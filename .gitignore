@@ -46,3 +46,6 @@ bin
 .classPath
 .project
 wrkDir
+/libs/
+/swtWin64/
+/swtWin86/

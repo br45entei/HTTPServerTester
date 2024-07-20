@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project HTTPServerTester">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <!--define folder properties-->
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="${dir.buildfile}/../.."/>
+    <property name="dir.jarfile" value="C:/Java/jars/HTTPServerTester"/>
+    <target name="create_run_jar">
+        <jar destfile="${dir.jarfile}/HTTPServerTester.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="com.gmail.br45entei.main.Main"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="${dir.buildfile}/bin"/>
+            <fileset dir="${dir.buildfile}/src"/>
+            <fileset dir="${dir.buildfile}/swtWin64"/>
+            <fileset dir="${dir.buildfile}/swtLibs"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/libs/apache-commons.jar"/>
+        </jar>
+    </target>
+</project>
