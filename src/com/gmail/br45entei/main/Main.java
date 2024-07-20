@@ -74,7 +74,7 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-/** @author Brian Reid &ltbr45entei&#064;gmail.com&gt; */
+/** @author Brian Reid &lt;br45entei&#064;gmail.com&gt; */
 public final class Main {
 	
 	protected static Main instance = null;
