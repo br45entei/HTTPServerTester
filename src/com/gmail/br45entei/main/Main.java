@@ -90,6 +90,44 @@ public final class Main {
 		}
 	}
 	
+	public static final String makePathFilesystemSafe(String s) {
+		char escape = '%'; // ... or some other legal char.
+		int len = s.length();
+		StringBuilder sb = new StringBuilder(len);
+		for(int i = 0; i < len; i++) {
+			char ch = s.charAt(i);
+			if(ch < ' ' || ch >= 0x7F || ch == '?' || ch == '�' || ch == '"' || ch == '*' || ch == '|' || ch == '<' || ch == '>' || ch == escape) {
+				sb.append(escape);
+				if(ch < 0x10) {
+					sb.append('0');
+				}
+				sb.append(Integer.toHexString(ch));
+			} else {
+				sb.append(ch);
+			}
+		}
+		return sb.toString();
+	}
+	
+	public static final String makeStringFilesystemSafe(String s) {
+		char escape = '%'; // ... or some other legal char.
+		int len = s.length();
+		StringBuilder sb = new StringBuilder(len);
+		for(int i = 0; i < len; i++) {
+			char ch = s.charAt(i);
+			if(ch < ' ' || ch >= 0x7F || ch == '/' || ch == '\\' || ch == '?' || ch == '�' || ch == ':' || ch == '"' || ch == '*' || ch == '|' || ch == '<' || ch == '>' || (ch == '.' && i == 0) || ch == escape) {
+				sb.append(escape);
+				if(ch < 0x10) {
+					sb.append('0');
+				}
+				sb.append(Integer.toHexString(ch));
+			} else {
+				sb.append(ch);
+			}
+		}
+		return sb.toString();
+	}
+	
 	//======================================================================================================================================
 	
 	private volatile boolean isRunning = false;
@@ -314,7 +352,8 @@ public final class Main {
 		requestURI = requestURI.trim().isEmpty() ? "/" : requestURI;//requestURI.startsWith("/") ? requestURI : "/" + requestURI;
 		System.out.println("Connecting to http" + (https ? "s" : "") + "://" + ip + ":" + port + " (HTTP Request: " + method + " " + requestURI + " " + protocol + ")");
 		InetSocketAddress addr = new InetSocketAddress(ip, port);
-		if(addr.isUnresolved()) {
+		boolean failedToConnect = addr.isUnresolved();
+		if(failedToConnect) {
 			return "Failed to connect to server \"" + ip + ":" + port + "\": Address is unresolved";
 		}
 		try {
@@ -707,6 +746,7 @@ public final class Main {
 							}
 						}
 						
+						fileName = fileName.startsWith("/") ? fileName.substring(1) : fileName;
 						File folder = new File(System.getProperty("user.dir") + File.separatorChar + "downloads");
 						if(!folder.exists()) {
 							folder.mkdirs();
@@ -828,10 +868,10 @@ public final class Main {
 							
 							if(baos.size() > 0) {
 								
-								File file = new File(folder, fileName);
+								File file = new File(folder, makeStringFilesystemSafe(fileName));
 								if(file.exists()) {
 									int i = 0;
-									String namePart = FilenameUtils.getBaseName(fileName);
+									String namePart = makeStringFilesystemSafe(FilenameUtils.getBaseName(fileName));
 									String ext = "." + FilenameUtils.getExtension(fileName);
 									while(file.exists()) {
 										file = new File(folder, namePart + "_" + i + ext);
