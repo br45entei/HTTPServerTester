@@ -227,18 +227,20 @@ public final class Main {
 		lblProtocol.setText("Method:");
 		
 		this.httpMethod = new CCombo(this.shell, SWT.BORDER);
+		this.httpMethod.setEditable(true);
+		this.httpMethod.setBackground(SWTResourceManager.getColor(SWT.COLOR_LIST_BACKGROUND));
+		this.httpMethod.setItems(new String[] {"CONNECT", "GET", "HEAD", "PATCH", "POST", "PUT", "DELETE", "TRACE", "OPTIONS", "BREW"});
+		this.httpMethod.select(1);
 		this.httpMethod.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if(Main.this.httpMethod.getText().equals("BREW")) {
-					Main.this.protocolVersion.setText("HTCPCP/1.1");
+				if(Main.this.httpMethod.getText().equalsIgnoreCase("BREW")) {
+					SWTUtil.setText(Main.this.protocolVersion, "HTCPCP/1.1");
+				} else if(Main.this.protocolVersion.getText().equalsIgnoreCase("HTCPCP/1.1")) {
+					SWTUtil.setText(Main.this.protocolVersion, "HTTP/1.1");
 				}
 			}
 		});
-		this.httpMethod.setEditable(true);
-		this.httpMethod.setBackground(SWTResourceManager.getColor(SWT.COLOR_LIST_BACKGROUND));
-		this.httpMethod.setItems(new String[] {"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS", "TRACE", "CONNECT", "BREW"});
-		this.httpMethod.setText("GET");
 		this.httpMethod.setBounds(71, 92, 94, 21);
 		
 		this.requestURI = new Text(this.shell, SWT.BORDER);
@@ -247,9 +249,19 @@ public final class Main {
 		
 		this.protocolVersion = new CCombo(this.shell, SWT.BORDER);
 		this.protocolVersion.setBackground(SWTResourceManager.getColor(SWT.COLOR_LIST_BACKGROUND));
-		this.protocolVersion.setEditable(false);
+		this.protocolVersion.setEditable(true);
 		this.protocolVersion.setItems(new String[] {"HTTP/1.1", "HTTP/1.0"});
 		this.protocolVersion.setText("HTTP/1.1");
+		this.protocolVersion.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if(Main.this.protocolVersion.getText().equalsIgnoreCase("HTCPCP/1.1")) {
+					SWTUtil.setText(Main.this.httpMethod, "BREW");
+				} else if(Main.this.httpMethod.getText().equalsIgnoreCase("BREW")) {
+					SWTUtil.setText(Main.this.httpMethod, "GET");
+				}
+			}
+		});
 		this.protocolVersion.setBounds(232, 92, 81, 21);
 		
 		Label lblProtocol_1 = new Label(this.shell, SWT.NONE);
